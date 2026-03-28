@@ -1,15 +1,35 @@
 {
-  "name": "server",
-  "version": "1.0.50",
+  "name": "@trailway/api",
+  "version": "0.0.1",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist",
+    "start": "bun dist/index.js",
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:migrate": "tsx src/db/migrate.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "elysia": "latest",
+    "better-auth": "latest",
+    "drizzle-orm": "latest",
+    "drizzle-zod": "latest",
+    "pg": "latest",
+    "zod": "latest",
+    "dayjs": "latest",
+    "axios": "latest",
+    "node-cron": "latest",
+    "resend": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "@types/bun": "^1.3.11",
+    "@types/node": "^25.5.0",
+    "@types/node-cron": "latest",
+    "@types/pg": "^8.20.0",
+    "bun-types": "latest",
+    "drizzle-kit": "latest",
+    "typescript": "latest"
+  }
 }
