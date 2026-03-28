@@ -12,7 +12,6 @@ export const db = drizzle(pool, { schema })
 
 export type Database = typeof db
 
-// Health check
 export async function healthCheck() {
   try {
     await db.execute('SELECT 1')
