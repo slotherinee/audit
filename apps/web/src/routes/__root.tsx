@@ -10,10 +10,15 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import * as React from 'react'
 import type { QueryClient } from '@tanstack/react-query'
+import { ConfigProvider } from 'antd'
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
 import { NotFound } from '~/components/NotFound'
+import { Navbar } from '~/components/Navbar'
+import { Footer } from '~/components/Footer'
 import appCss from '~/styles/app.css?url'
 import { seo } from '~/utils/seo'
+import { themeConfig, darkThemeConfig } from '~/config/theme'
+import { ThemeProvider, useTheme } from '~/config/theme-context'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
@@ -29,11 +34,14 @@ export const Route = createRootRouteWithContext<{
       },
       ...seo({
         title:
-          'TanStack Start | Type-Safe, Client-First, Full-Stack React Framework',
-        description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
+          'Trailway | Ship Audit Logging in Minutes, Not Sprints',
+        description: `Enterprise-grade audit trails for indie developers. From $19/month with 100k events.`,
       }),
     ],
     links: [
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' },
       { rel: 'stylesheet', href: appCss },
       {
         rel: 'apple-touch-icon',
@@ -75,6 +83,18 @@ function RootComponent() {
   )
 }
 
+function ThemedApp({ children }: { children: React.ReactNode }) {
+  const { isDark, mounted } = useTheme()
+  const activeTheme = mounted && isDark ? darkThemeConfig : themeConfig
+  return (
+    <ConfigProvider theme={activeTheme}>
+      <Navbar />
+      {children}
+      <Footer />
+    </ConfigProvider>
+  )
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html>
@@ -82,60 +102,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <div className="p-2 flex gap-2 text-lg">
-          <Link
-            to="/"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>{' '}
-          <Link
-            to="/posts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Posts
-          </Link>{' '}
-          <Link
-            to="/users"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Users
-          </Link>{' '}
-          <Link
-            to="/route-a"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Pathless Layout
-          </Link>{' '}
-          <Link
-            to="/deferred"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Deferred
-          </Link>{' '}
-          <Link
-            // @ts-expect-error
-            to="/this-route-does-not-exist"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            This Route Does Not Exist
-          </Link>
-        </div>
-        <hr />
-        {children}
+        <ThemeProvider>
+          <ThemedApp>
+            {children}
+          </ThemedApp>
+        </ThemeProvider>
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
